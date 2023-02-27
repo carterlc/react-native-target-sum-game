@@ -8,23 +8,13 @@
 
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import Game from './Game';
 
 class App extends React.Component {
     render() {
         return (
-            <View style={styles.container}>
-                <Text>TargetSum</Text>
-            </View>
+            <Game />
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#ddd',
-        flex: 1,
-    },
-});
-
 export default App;
