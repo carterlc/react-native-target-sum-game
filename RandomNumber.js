@@ -5,15 +5,18 @@ import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 class RandomNumber extends React.Component {
     static propTypes = {
         number: PropTypes.number.isRequired,
-        isSelected: PropTypes.bool.isRequired,
+        isDisabled: PropTypes.bool.isRequired,
+        onPress: PropTypes.func.isRequired,
+        id: PropTypes.number.isRequired,
     };
     handlePress = () => {
         console.log(this.props.nummber);
+        this.props.onPress(this.props.id);
     }
     render() {
         return (
             <TouchableOpacity onPress={this.handlePress}>
-            <Text style={[styles.random, this.props.isSelected && styles.selected]}>{this.props.number}</Text>
+            <Text style={[styles.random, this.props.isDisabled && styles.selected]}>{this.props.number}</Text>
             </TouchableOpacity>
         );
     }
