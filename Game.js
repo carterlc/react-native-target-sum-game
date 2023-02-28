@@ -50,18 +50,19 @@ class Game extends React.Component {
         }
         // console.warn(sumSelected);
     };
+
     render() {
         const gameStatus = this.gameStatus();
         return (
             <View style={styles.container}>
-                <Text style={styles.target}>{this.target}</Text>
+                <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
                 <View style={styles.randomContainer}>
                     {this.randomNumbers.map((randomNumber, index) =>
                         <RandomNumber 
                             key={index}
                             id={index}
                             number={randomNumber}
-                            isDisabled={this.isNumberSelected(index)}
+                            isDisabled={this.isNumberSelected(index) || gameStatus !== 'PLAYING'}
                             onPress={this.selectNumber}
                             />
                     )}
@@ -96,6 +97,16 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: 'space-around',
         marginHorizontal: 20,
+    },
+
+    STATUS_PLAYING: {
+        backgroundColor:'white',
+    },
+    STATUS_WON: {
+        backgroundColor:'green',
+    },
+    STATUS_LOST: {
+        backgroundColor:'red',
     },
 });
 export default Game;
