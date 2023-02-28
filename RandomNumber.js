@@ -10,9 +10,9 @@ class RandomNumber extends React.Component {
         id: PropTypes.number.isRequired,
     };
     handlePress = () => {
-        console.log(this.props.nummber);
+        if (this.props.isDisabled) { return; }
         this.props.onPress(this.props.id);
-    }
+    };
     render() {
         return (
             <TouchableOpacity onPress={this.handlePress}>
@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
         height: 100,
         marginHorizontal: 20,
         marginVertical: 20,
-        textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center',
+        textAlign:'center',
         color: '#776e65',
         borderColor: '#bbada0',
         borderWidth: 10,

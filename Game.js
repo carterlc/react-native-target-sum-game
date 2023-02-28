@@ -13,11 +13,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import RandomNumber from './RandomNumber';
 class Game extends React.Component {
     static propTypes = {
-        randomNumberCount: PropTypes.string.isRequired,
+        randomNumberCount: PropTypes.number.isRequired,
     };
 
     state = {
-        selectedNumbers: [0, 4],
+        selectedNumbers: [],
     }
 
     randomNumbers = Array
@@ -31,9 +31,9 @@ class Game extends React.Component {
         return this.state.selectedNumbers.indexOf(numberIndex) >= 0;
     };
     selectNumber = (numberIndex) => {
-        this.setState((prevState) => {
-            return { selectedNumbers: [...prevState.selectedNumbers, numberIndex] };
-        });
+        this.setState((prevState) => ({
+            selectedNumbers: [...prevState.selectedNumbers, numberIndex],
+        }));
     };
 
     render() {
@@ -42,9 +42,13 @@ class Game extends React.Component {
                 <Text style={styles.target}>{this.target}</Text>
                 <View style={styles.randomContainer}>
                     {this.randomNumbers.map((randomNumber, index) =>
-                        <RandomNumber key={index} id={index} number={randomNumber} isDisabled={this.isNumberSelected(index) }
-                            
-                             />
+                        <RandomNumber 
+                            key={index}
+                            id={index}
+                            number={randomNumber}
+                            isDisabled={this.isNumberSelected(index)}
+                            onPress={this.selectNumber}
+                            />
                     )}
                 </View>
             </View>
@@ -64,17 +68,16 @@ const styles = StyleSheet.create({
         fontSize: 60,
         marginHorizontal: 50,
         textAlign: 'center',
-        color: '##776e65',
         fontWeight: 'bold',
+        color: '#776e65',
     },
 
     randomContainer: {
-        // flex: 1,
+        display:'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
         marginHorizontal: 20,
-
     },
 });
 export default Game;
