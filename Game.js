@@ -14,10 +14,12 @@ import RandomNumber from './RandomNumber';
 class Game extends React.Component {
     static propTypes = {
         randomNumberCount: PropTypes.number.isRequired,
+        initialSeconds: PropTypes.number.isRequired,
     };
 
     state = {
         selectedIds: [],
+        remainingSeconds: this.props.initialSeconds,
     }
 
     randomNumbers = Array
@@ -26,6 +28,24 @@ class Game extends React.Component {
     target = this.randomNumbers
         .slice(0, this.props.randomNumberCount - 2)
         .reduce((acc, curr) => acc + curr, 0);
+
+    //SHUFFLE NUMBERS
+
+    componentDidMount() {
+        this.intervalId = setInterval(() => {
+            this.setState((prevState) => {
+                return { remainingSeconds: prevState.remainingSeconds - 1 };
+            }, () => {
+                if (this.state.remainingSeconds === 0) {
+                    clearInterval(this.intervalId);
+                }
+            });
+        }, 1000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalId);
+    }
 
     isNumberSelected = (numberIndex) => {
         return this.state.selectedIds.indexOf(numberIndex) >= 0;
@@ -39,6 +59,9 @@ class Game extends React.Component {
         const sumSelected = this.state.selectedIds.reduce((acc, curr) => {
             return acc + this.randomNumbers[curr];
         }, 0);
+        if(this.state.remainingSeconds === 0) {
+            return 'LOST';
+        }
         if (sumSelected < this.target) {
             return 'PLAYING';
         }
@@ -58,17 +81,17 @@ class Game extends React.Component {
                 <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
                 <View style={styles.randomContainer}>
                     {this.randomNumbers.map((randomNumber, index) =>
-                        <RandomNumber 
+                        <RandomNumber
                             key={index}
                             id={index}
                             number={randomNumber}
                             isDisabled={this.isNumberSelected(index) || gameStatus !== 'PLAYING'}
                             onPress={this.selectNumber}
-                            />
+                        />
                     )}
                 </View>
                 <Text>
-                    {gameStatus}
+                    {this.state.remainingSeconds}
                 </Text>
             </View>
         );
@@ -92,7 +115,7 @@ const styles = StyleSheet.create({
     },
 
     randomContainer: {
-        display:'flex',
+        display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-around',
@@ -100,13 +123,16 @@ const styles = StyleSheet.create({
     },
 
     STATUS_PLAYING: {
-        backgroundColor:'white',
+        borderWidth: 10,
+        borderColor: 'white',
     },
     STATUS_WON: {
-        backgroundColor:'green',
+        borderWidth: 10,
+        borderColor: 'green',
     },
     STATUS_LOST: {
-        backgroundColor:'red',
+        borderWidth: 10,
+        borderColor: 'red',
     },
 });
 export default Game;
