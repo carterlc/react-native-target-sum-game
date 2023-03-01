@@ -9,13 +9,14 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import RandomNumber from './RandomNumber';
 import shuffle from 'lodash.shuffle';
 class Game extends React.Component {
     static propTypes = {
         randomNumberCount: PropTypes.number.isRequired,
         initialSeconds: PropTypes.number.isRequired,
+        onPlayAgain: PropTypes.func.isRequired,
     };
 
     state = {
@@ -46,6 +47,8 @@ class Game extends React.Component {
             });
         }, 1000)
     }
+
+    //RESET GAME
 
     componentWillUnmount() {
         clearInterval(this.intervalId);
@@ -106,6 +109,9 @@ class Game extends React.Component {
                         />
                     )}
                 </View>
+                {this.gameStatus !== 'PLAYING' && (
+                <Button title="Play Again" onPress={this.props.onPlayAgain}/>
+                )}
                 <Text>
                     {this.state.remainingSeconds}
                 </Text>
